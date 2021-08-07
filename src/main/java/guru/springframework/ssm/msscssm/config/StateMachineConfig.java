@@ -1,10 +1,7 @@
 package guru.springframework.ssm.msscssm.config;
 
-import guru.springframework.ssm.msscssm.actions.AuthAction;
-import guru.springframework.ssm.msscssm.actions.PreAuthAction;
 import guru.springframework.ssm.msscssm.domain.PaymentEvent;
 import guru.springframework.ssm.msscssm.domain.PaymentState;
-import guru.springframework.ssm.msscssm.guards.PaymentIdGuard;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -48,22 +45,22 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<PaymentSta
     public void configure(StateMachineTransitionConfigurer<PaymentState, PaymentEvent> transitions) throws Exception {
         transitions
                 .withExternal().source(PaymentState.NEW).target(PaymentState.NEW).event(PaymentEvent.PRE_AUTHORIZE)
-                    .action(preAuthAction).guard(paymentIdGuard)
+                .action(preAuthAction).guard(paymentIdGuard)
                 .and()
                 .withExternal().source(PaymentState.NEW).target(PaymentState.PRE_AUTH).event(PaymentEvent.PRE_AUTH_APPROVED)
-                    .action(preAuthApprovedAction)
+                .action(preAuthApprovedAction)
                 .and()
                 .withExternal().source(PaymentState.NEW).target(PaymentState.PRE_AUTH_ERROR).event(PaymentEvent.PRE_AUTH_DECLINED)
-                    .action(preAuthDeclinedAction)
+                .action(preAuthDeclinedAction)
                 .and()
                 .withExternal().source(PaymentState.PRE_AUTH).target(PaymentState.PRE_AUTH).event(PaymentEvent.AUTHORIZE)
                 .action(authAction)
                 .and()
                 .withExternal().source(PaymentState.PRE_AUTH).target(PaymentState.AUTH).event(PaymentEvent.AUTH_APPROVED)
-                    .action(authApprovedAction)
+                .action(authApprovedAction)
                 .and()
                 .withExternal().source(PaymentState.PRE_AUTH).target(PaymentState.AUTH_ERROR).event(PaymentEvent.AUTH_DECLINED)
-                    .action(authDeclinedAction);
+                .action(authDeclinedAction);
 
     }
 
